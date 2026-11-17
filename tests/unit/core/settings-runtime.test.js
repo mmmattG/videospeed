@@ -16,6 +16,7 @@ const docEl = document.documentElement;
 const RUNTIME_KEYS = [
   'rememberSpeed',
   'exclusiveKeys',
+  'sitePlaybackShortcuts',
   'audioBoolean',
   'startHidden',
   'controllerOpacity',

@@ -723,6 +723,7 @@ async function save_options() {
 
     const rememberSpeed = document.getElementById('rememberSpeed').checked;
     const exclusiveKeys = document.getElementById('exclusiveKeys').checked;
+    const sitePlaybackShortcuts = document.getElementById('sitePlaybackShortcuts').checked;
     const audioBoolean = document.getElementById('audioBoolean').checked;
     const startHidden = document.getElementById('startHidden').checked;
     const controllerOpacity = Number(document.getElementById('controllerOpacity').value);
@@ -763,6 +764,7 @@ async function save_options() {
     const settingsToSave = {
       rememberSpeed: rememberSpeed,
       exclusiveKeys: exclusiveKeys,
+      sitePlaybackShortcuts,
       audioBoolean: audioBoolean,
       startHidden: startHidden,
       controllerOpacity: controllerOpacity,
@@ -809,6 +811,7 @@ async function restore_options() {
 
     document.getElementById('rememberSpeed').checked = storage.rememberSpeed;
     document.getElementById('exclusiveKeys').checked = storage.exclusiveKeys;
+    document.getElementById('sitePlaybackShortcuts').checked = storage.sitePlaybackShortcuts;
     document.getElementById('audioBoolean').checked = storage.audioBoolean;
     document.getElementById('startHidden').checked = storage.startHidden;
     document.getElementById('controllerOpacity').value = storage.controllerOpacity;

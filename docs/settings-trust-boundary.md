@@ -17,7 +17,7 @@ Private means site rules, the legacy blacklist, `enabled`, a remembered speed th
 The page script fires `VSC_REQUEST_SETTINGS` and the bridge answers `VSC_SETTINGS_READY` once. The request carries nothing the bridge trusts: policy is resolved against the frame's own `location.href`.
 
 - **VSC is off for the document:** the detail is exactly `{ abort: true }`. That covers a disabled extension, a first matching site rule that is disabled, an inherited `about:` frame, and a failed startup read. A document that saw the extension disabled at any point stays off until it reloads.
-- **VSC is on:** the detail is `{ settings }`, holding exactly `initialSpeed` and the nine runtime preferences: `rememberSpeed`, `exclusiveKeys`, `audioBoolean`, `startHidden`, `controllerOpacity`, `controllerButtonSize`, `customCSS`, `keyBindings`, `logLevel`.
+- **VSC is on:** the detail is `{ settings }`, holding exactly `initialSpeed` and the ten runtime preferences: `rememberSpeed`, `exclusiveKeys`, `sitePlaybackShortcuts`, `audioBoolean`, `startHidden`, `controllerOpacity`, `controllerButtonSize`, `customCSS`, `keyBindings`, `logLevel`.
 
 The bridge keeps one copy of sync storage: the startup read with every later change applied, including changes that outrun the read. It resolves the answer once, from the latest state, when the request arrives. Rule edits after that take effect on the next load.
 

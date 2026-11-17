@@ -2,12 +2,15 @@
  * Event management system for Video Speed Controller
  */
 
+import { getSitePlaybackBindings } from './site-playback-shortcuts.js';
+
 window.VSC = window.VSC || {};
 
 class EventManager {
   constructor(config, actionHandler) {
     this.config = config;
     this.actionHandler = actionHandler;
+    this.hostname = location.hostname;
     this.listeners = new Map();
 
     // Event deduplication to prevent duplicate key processing
@@ -118,7 +121,7 @@ class EventManager {
     if (keyBinding) {
       this.actionHandler.runAction(keyBinding.action, keyBinding.value, event);
 
-      if (this.config.settings.exclusiveKeys) {
+      if (keyBinding.exclusive || this.config.settings.exclusiveKeys) {
         event.preventDefault();
         event.stopPropagation();
       }
@@ -167,6 +170,15 @@ class EventManager {
     const meta = !!event.metaKey;
     const shift = !!event.shiftKey;
     const hasModifier = ctrl || alt || meta;
+
+    if (this.config.settings.sitePlaybackShortcuts && !hasModifier && !shift) {
+      const siteBindings = getSitePlaybackBindings(this.hostname);
+      const playbackCode =
+        code && code !== 'Unidentified' ? code : { 74: 'KeyJ', 75: 'KeyK', 76: 'KeyL' }[keyCode];
+      if (siteBindings && ['KeyJ', 'KeyK', 'KeyL'].includes(playbackCode)) {
+        return siteBindings[playbackCode];
+      }
+    }
 
     // Runtime fallback: if event.code is empty or unidentified, match on keyCode
     if (!code || code === 'Unidentified') {

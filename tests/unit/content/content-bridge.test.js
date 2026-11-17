@@ -28,6 +28,7 @@ const RUNTIME_SETTINGS_KEYS = [
   'initialSpeed',
   'rememberSpeed',
   'exclusiveKeys',
+  'sitePlaybackShortcuts',
   'audioBoolean',
   'startHidden',
   'controllerOpacity',

@@ -77,6 +77,106 @@ describe('EventManager Matching', () => {
 
   // Chord matching
 
+  it.each([
+    ['KeyJ', 'j', 74, 'rewind', 10],
+    ['KeyK', 'k', 75, 'pause', 0],
+    ['KeyL', 'l', 76, 'advance', 10],
+  ])(
+    'Netflix %s replaces conflicting bindings and handles the key once',
+    (code, key, keyCode, action, value) => {
+      const { config, eventManager, actions } = setupEnv([
+        { action: 'jump', code, keyCode, value: 0 },
+      ]);
+      config.settings.sitePlaybackShortcuts = true;
+      eventManager.hostname = 'www.netflix.com';
+      const event = makeEvent({ code, key, keyCode });
+      event.preventDefault = vi.fn();
+      event.stopPropagation = vi.fn();
+
+      eventManager.handleKeydown(event);
+
+      expect(actions).toEqual([{ action, value }]);
+      expect(event.preventDefault).toHaveBeenCalledOnce();
+      expect(event.stopPropagation).toHaveBeenCalledOnce();
+    }
+  );
+
+  it.each(['youtube.com', 'www.youtube.com', 'm.youtube.com', 'www.youtube-nocookie.com'])(
+    '%s keeps native J/K/L even with conflicting VSC bindings and exclusive keys',
+    (hostname) => {
+      const { config, eventManager, actions } = setupEnv(
+        [74, 75, 76].map((keyCode) => ({
+          action: 'jump',
+          code: `Key${String.fromCharCode(keyCode)}`,
+          keyCode,
+          value: 0,
+        }))
+      );
+      config.settings.sitePlaybackShortcuts = true;
+      config.settings.exclusiveKeys = true;
+      eventManager.hostname = hostname;
+      for (const keyCode of [74, 75, 76]) {
+        const event = makeEvent({ code: `Key${String.fromCharCode(keyCode)}`, keyCode });
+        event.preventDefault = vi.fn();
+        event.stopPropagation = vi.fn();
+        eventManager.handleKeydown(event);
+        expect(event.preventDefault).not.toHaveBeenCalled();
+        expect(event.stopPropagation).not.toHaveBeenCalled();
+      }
+      expect(actions).toEqual([]);
+    }
+  );
+
+  it('keeps speed controls on YouTube and modifier shortcuts on Netflix', () => {
+    const { config, eventManager, actions } = setupEnv([
+      { action: 'faster', code: 'KeyD', keyCode: 68, value: 0.1 },
+      {
+        action: 'jump',
+        code: 'KeyJ',
+        keyCode: 74,
+        value: 0,
+        modifiers: { shift: true, ctrl: false, alt: false, meta: false },
+      },
+    ]);
+    config.settings.sitePlaybackShortcuts = true;
+    eventManager.hostname = 'www.youtube.com';
+    eventManager.handleKeydown(makeEvent({ code: 'KeyD', keyCode: 68 }));
+    eventManager.hostname = 'www.netflix.com';
+    eventManager.handleKeydown(makeEvent({ code: 'KeyJ', keyCode: 74, shiftKey: true }));
+    expect(actions).toEqual([
+      { action: 'faster', value: 0.1 },
+      { action: 'jump', value: 0 },
+    ]);
+  });
+
+  it('supports keyboards without event.code and can turn the site overrides off', () => {
+    const { config, eventManager, actions } = setupEnv([
+      { action: 'jump', code: 'KeyJ', keyCode: 74, value: 0 },
+    ]);
+    config.settings.sitePlaybackShortcuts = true;
+    eventManager.hostname = 'www.netflix.com';
+    eventManager.handleKeydown(makeEvent({ keyCode: 74, timeStamp: 1 }));
+    config.settings.sitePlaybackShortcuts = false;
+    eventManager.handleKeydown(makeEvent({ code: 'KeyJ', keyCode: 74, timeStamp: 2 }));
+    expect(actions).toEqual([
+      { action: 'rewind', value: 10 },
+      { action: 'jump', value: 0 },
+    ]);
+  });
+
+  it.each(['notnetflix.com', 'netflix.com.example', 'notyoutube.com', 'youtube.com.example'])(
+    'keeps configured bindings on %s',
+    (hostname) => {
+      const { config, eventManager, actions } = setupEnv([
+        { action: 'jump', code: 'KeyJ', keyCode: 74, value: 0 },
+      ]);
+      config.settings.sitePlaybackShortcuts = true;
+      eventManager.hostname = hostname;
+      eventManager.handleKeydown(makeEvent({ code: 'KeyJ', keyCode: 74 }));
+      expect(actions).toEqual([{ action: 'jump', value: 0 }]);
+    }
+  );
+
   it('Chord: Ctrl+KeyS matches chord binding, not simple binding', () => {
     const { eventManager, actions } = setupEnv([
       { action: 'slower', code: 'KeyS', key: 83, keyCode: 83, value: 0.1, force: false },

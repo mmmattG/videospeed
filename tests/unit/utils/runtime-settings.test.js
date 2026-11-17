@@ -25,6 +25,7 @@ const PAGE = 'https://video.example/watch?v=1';
 const PREFERENCE_KEYS = [
   'rememberSpeed',
   'exclusiveKeys',
+  'sitePlaybackShortcuts',
   'audioBoolean',
   'startHidden',
   'controllerOpacity',
@@ -100,6 +101,7 @@ describe('projectPreferences', () => {
     expect(projectPreferences({})).toEqual({
       rememberSpeed: false,
       exclusiveKeys: false,
+      sitePlaybackShortcuts: true,
       audioBoolean: true,
       startHidden: false,
       controllerOpacity: 0.3,

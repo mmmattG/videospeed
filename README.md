@@ -1,6 +1,17 @@
-# [Install from Chrome Web Store][chrome-web-store-link]
+# Video Speed Controller (Matt)
 
-[![Chrome Web Store][chrome-web-store-version]][chrome-web-store-link] [![Chrome Web Store Users][chrome-web-store-users-badge]][chrome-web-store-link] [![Chrome Web Store Users][chrome-web-store-stars]][chrome-web-store-link]  
+Personal fork of [igrigorik/videospeed](https://github.com/igrigorik/videospeed).
+J/K/L rewind 10 seconds, toggle playback, and advance 10 seconds on Netflix.
+On YouTube and YouTube embeds, those keys pass through to the native player.
+VSC's speed controls remain available on both sites. Modified shortcuts and other
+sites keep their configured bindings. Turn this behavior off with **Netflix and
+YouTube playback keys** in Settings.
+
+Build with `npm ci` and `npm run build`, then load `dist/` as an unpacked extension.
+Disable the original VSC extension while using this fork to avoid duplicate controls.
+Export and import settings through VSC's **More actions** menu to preserve your preferences.
+
+[![Chrome Web Store][chrome-web-store-version]][chrome-web-store-link] [![Chrome Web Store Users][chrome-web-store-users-badge]][chrome-web-store-link] [![Chrome Web Store Users][chrome-web-store-stars]][chrome-web-store-link]
 
 **Video Speed Controller** gives you fine-grained control over any HTML5 video
 or audio element, on any site.
@@ -24,7 +35,6 @@ means higher engagement. With practice, many settle at 2x or above and find it
 HTML5 media elements expose a native playback rate API, but most players hide
 or artificially limit it. Speed adjustments should be effortless and frequent:
 we don't read at a fixed pace, and we shouldn't watch at one either.
-
 
 ## Features
 
@@ -73,6 +83,5 @@ for them to take effect.
 [chrome-web-store-users-badge]: https://img.shields.io/chrome-web-store/users/nffaoalbilbmmfgbnbgppjihopabppdk
 [chrome-web-store-stars]: https://img.shields.io/chrome-web-store/stars/nffaoalbilbmmfgbnbgppjihopabppdk
 [github-release-badge]: https://img.shields.io/github/v/release/igrigorik/videospeed
-
 [chrome-web-store-link]: https://chromewebstore.google.com/detail/video-speed-controller/nffaoalbilbmmfgbnbgppjihopabppdk
 [github-release-link]: https://github.com/igrigorik/videospeed/releases

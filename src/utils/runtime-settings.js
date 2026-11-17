@@ -116,6 +116,7 @@ const DEFAULT_KEY_BINDINGS = Object.freeze(
 const PREFERENCES = Object.freeze({
   rememberSpeed: preference(false, readBoolean),
   exclusiveKeys: preference(false, readBoolean),
+  sitePlaybackShortcuts: preference(true, readBoolean),
   audioBoolean: preference(true, readBoolean), // show controllers on audio elements
   startHidden: preference(false, readBoolean),
   controllerOpacity: preference(0.3, readNumber),
